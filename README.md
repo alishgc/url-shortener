@@ -1,6 +1,6 @@
 # URL Shortener
 
-A full-stack Node.js application that allows users to create shortened versions of long URLs with user authentication and analytics tracking.
+A Node.js application that allows users to create shortened versions of long URLs with user authentication and analytics tracking.
 
 ## Features
 
@@ -9,7 +9,7 @@ A full-stack Node.js application that allows users to create shortened versions 
 - **Dashboard**: View all shortened URLs and track click counts
 - **Click Analytics**: Monitor how many times each shortened URL has been clicked
 - **Session Management**: Secure session handling with express-session
-- **User-Specific URLs**: Each user can only access and manage their own shortened URLs
+- **User-Specific URLs**: Each user can only manage their own shortened URLs
 
 ## Tech Stack
 
@@ -135,15 +135,3 @@ npm run dev
 ```
 
 This uses nodemon to automatically restart the server when file changes are detected.
-
-## License
-
-ISC
-
-## Author
-
-Created by alishgc
-
-## Contributing
-
-Feel free to fork this project and submit pull requests for any improvements.
