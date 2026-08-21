@@ -21,14 +21,25 @@ router.post("/", requireAuth, async (req, res)=>{
         return res.status(400).send("Invalid URL");
     }
 
-    const shortCode = crypto.randomBytes(4).toString("base64url");
+    for (let attempt = 0; attempt < 5; attempt++) {
 
-    await pool.execute(`INSERT INTO urls (user_id, original_url, short_code) VALUES (?, ?, ?)`, [userId, url, shortCode]);
+        const shortCode = crypto.randomBytes(4).toString("base64url");
 
-    console.log(url);
-    console.log(shortCode);
+        try {
+            await pool.execute(`INSERT INTO urls (user_id, original_url, short_code) VALUES (?, ?, ?)`, [userId, url, shortCode]);
+            req.session.message = "URL shortened successfully!";
+            return res.redirect("/dashboard");
+            
+        } catch (error) {
+            if (error.code === "ER_DUP_ENTRY"){
+                continue;
+            }
+            return res.status(500).send("Something went wrong");
+        }
+    }
 
-    res.send({url, shortCode});
+    return res.status(500).send("Could not generate a unique short URL");
+
 });
 
 router.post("/:id", requireAuth, async (req, res)=> {
@@ -47,9 +58,11 @@ router.post("/:id", requireAuth, async (req, res)=> {
         );
     
         if(result.affectedRows === 0){
-            return res.status(404).send("URL not found or unauthorized");
+            req.session.message = "URL not found.";
+            return res.redirect("dashboard");
         }
-    
+
+        req.session.message = "URL deleted successfully!";
         res.redirect("/dashboard");
 
     } catch (error) {

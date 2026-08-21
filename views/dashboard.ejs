@@ -6,6 +6,10 @@
   </head>
   <body>
     <h1>Dashboard</h1>
+    
+    <% if (message) { %>
+        <p><%= message %></p>
+    <% } %>
 
     <form action="/urls" method="POST">
       <input type="url" name="url" placeholder="Enter a URL" required />

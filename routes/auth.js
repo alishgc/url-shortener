@@ -18,14 +18,16 @@ router.post("/register", async (req, res) => {
 
 
     if (!username || !email || !password) {
-        return res.status(400).send("Input feild should not be empty");
+        req.session.message = "Input feild should not be empty";
+        return res.redirect("/auth/register");
     }
     if(username.length < 3){
-        return res.status(400).send("Username should be at least 3 characters long");
+        req.session.message = "Username should be at least 3 characters long";
+        return res.redirect("/auth/register");
     }
     if(password.length < 8){
-        return res.status(400).send("Passwoed should be at least 8 characters long");
-        
+        req.session.message = "Password should be at least 8 characters long";
+        return res.redirect("/auth/register");        
     }
 
     try {
@@ -34,14 +36,16 @@ router.post("/register", async (req, res) => {
             `SELECT id FROM users WHERE username = ? OR email = ?`,[username, email]);
         
         if(rows.length > 0) {
-            return res.status(409).send("Username or email already exists.");
+            req.session.message = "Username or email already exists.";
+            return res.redirect("/auth/register");
         }
     
         const hashedPassword = await bcrypt.hash(password, 10);
     
         await pool.execute(`INSERT INTO users (username, email, password) VALUES (?,?,?)`,[username, email, hashedPassword])
     
-        res.send("Registration successful!");
+        req.session.message = "Registration successful!";
+        res.redirect("/auth/login");
     } catch (error) {
         console.log(error);
         res.status(500).send("Something went wrong");
@@ -59,27 +63,34 @@ router.post("/login", async (req, res) => {
     const password = req.body.password;
 
     if (!email || !password) {
-        return res.status(400).send("Input feild should not be empty");
+        req.session.message = "Input feild should not be empty";
+        return res.redirect("/auth/login");
     }
 
-    const [rows] = await pool.execute(`
-        SELECT id, username, password
-        FROM users
-        WHERE email = ?`,[email]);
-
-    if(rows.length === 0){
-        return res.send("Invalid email or password.")
+    try {
+        const [rows] = await pool.execute(`
+            SELECT id, username, password
+            FROM users
+            WHERE email = ?`,[email]);
+    
+        if(rows.length === 0){
+            req.session.message = "Invalid email or password.";
+            return res.redirect("/auth/login");
+        }
+    
+        const user = rows[0];
+        const passwordMatch = await bcrypt.compare(password, user.password);
+    
+        if (!passwordMatch) {
+            req.session.message = "Invalid email or password.";
+            return res.redirect("/auth/login");
+        }
+        req.session.userId = user.id;
+        res.redirect("/dashboard");
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Something went wrong");
     }
-
-    const user = rows[0];
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-
-    if (!passwordMatch) {
-        return res.status(401).send("Invalid email or password.");
-    }
-    req.session.userId = user.id;
-    res.redirect("/dashboard");
 });
 
 router.post("/logout", (req, res) => {
