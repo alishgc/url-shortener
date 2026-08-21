@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <h1>Dashboard</h1>
+
+    <form action="/urls" method="POST">
+      <input type="url" name="url" placeholder="Enter a URL" required />
+
+      <button type="submit">Shorten</button>
+    </form>
+
+    <hr />
+
+    <h2>Your URLs</h2>
+
+    <% if (urls.length === 0) { %>
+
+    <p>You haven't shortened any URLs yet.</p>
+
+    <% } else { %> <% urls.forEach(url => { %>
+
+    <div>
+      <p>
+        <strong>Original:</strong>
+        <%= url.original_url %>
+      </p>
+
+      <p>
+        <strong>Short:</strong>
+        <a href="/<%= url.short_code %>"> /<%= url.short_code %> </a>
+      </p>
+
+      <p>
+        <strong>Clicks:</strong>
+        <%= url.click_count %>
+      </p>
+
+      <form action="/urls/<%= url.id %>" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+    
+      <hr />
+    </div>
+
+
+
+    <% }) %> <% } %>
+
+    <form action="/auth/logout" method="POST">
+      <button type="submit">Logout</button>
+    </form>
+  </body>
+</html>

@@ -1,16 +1,21 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-
-const session = require('express-session')
-
-const authRouter = require("./routes/auth")
-
 const PORT = process.env.PORT;
 
-const pool = require("./db/db")
+const pool = require("./db/db");
+
+const session = require('express-session');
+
+const authRouter = require("./routes/auth");
+const requireAuth = require("./middleware/auth");
+
+const urlsRouter = require("./routes/urls");
+
+const redirectRouter = require("./routes/redirect");
 
 app.set("view engine", "ejs");
+
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -21,7 +26,9 @@ app.use(session({
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/auth", authRouter)
+app.use("/auth", authRouter);
+
+app.use("/urls", urlsRouter);
 
 
 // database connection test 
@@ -40,12 +47,33 @@ app.get("/", async (req, res) => {
     res.send(`Server is running!`);
 });
 
-const requireAuth = require("./middleware/auth");
 
-app.get("/dashboard", requireAuth, (req, res) => {
-    res.send(`Welcome! Your user ID is ${req.session.userId}`);
+
+app.get("/dashboard", requireAuth, async (req, res) => {
+
+    const userId = req.session.userId;
+
+    try {
+        
+        const [urls] = await pool.execute(
+            `SELECT id, original_url, short_code, click_count, created_at
+             FROM urls
+             WHERE user_id = ?
+             ORDER BY created_at DESC`,
+            [userId]
+        );
+
+        res.render("dashboard", { urls });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Something went wrong");
+    }
+
 });
 
+
+app.use("/", redirectRouter);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

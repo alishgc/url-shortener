@@ -55,7 +55,6 @@ router.get("/login", (req, res)=>{
 
 router.post("/login", async (req, res) => {
 
-
     const email = req.body.email?.trim();
     const password = req.body.password;
 
@@ -80,7 +79,7 @@ router.post("/login", async (req, res) => {
         return res.status(401).send("Invalid email or password.");
     }
     req.session.userId = user.id;
-    res.send("Login Successful");
+    res.redirect("/dashboard");
 });
 
 router.post("/logout", (req, res) => {
