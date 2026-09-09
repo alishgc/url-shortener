@@ -2,6 +2,8 @@
 
 A Node.js application that allows users to create shortened versions of long URLs with user authentication and analytics tracking.
 
+**Live Demo**: https://short.alishgc.com.np
+
 ## Features
 
 - **User Authentication**: Secure user registration and login with bcrypt password hashing
@@ -18,6 +20,12 @@ A Node.js application that allows users to create shortened versions of long URL
 - **Database**: MySQL
 - **Authentication**: bcrypt for password hashing
 - **Session Management**: express-session
+
+## Deployment
+
+- Platform: Render
+- Database: Aiven MySQL
+- Domain: short.alishgc.com.np
 
 ## Prerequisites
 
