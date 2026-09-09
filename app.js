@@ -47,8 +47,8 @@ app.get("/", async (req, res) => {
     res.send(`
     <h1>URL Shortener</h1>
     <p>Shorten your long URLs and manage your links easily.</p>
-    <a href="/login">Login</a> <br><br>
-    <a href="/register">Create Account</a>
+    <a href="auth/login">Login</a> <br><br>
+    <a href="auth/register">Create Account</a>
     `);
 });
 
