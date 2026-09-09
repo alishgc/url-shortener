@@ -44,7 +44,12 @@ async function connectDB() {
 connectDB();
 
 app.get("/", async (req, res) => {
-    res.send(`Server is running!`);
+    res.send(`
+    <h1>URL Shortener</h1>
+    <p>Shorten your long URLs and manage your links easily.</p>
+    <a href="/login">Login</a> <br><br>
+    <a href="/register">Create Account</a>
+    `);
 });
 
 
