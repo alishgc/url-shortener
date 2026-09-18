@@ -4,71 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>URL Shortener</title>
-
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: Arial, sans-serif;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f5f5f5;
-        color: #222;
-      }
-
-      .container {
-        text-align: center;
-        max-width: 600px;
-        padding: 40px 20px;
-      }
-
-      h1 {
-        font-size: 42px;
-        margin-bottom: 15px;
-      }
-
-      p {
-        font-size: 18px;
-        color: #666;
-        margin-bottom: 30px;
-        line-height: 1.6;
-      }
-
-      .buttons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-      }
-
-      a {
-        text-decoration: none;
-        padding: 12px 25px;
-        border-radius: 6px;
-        font-size: 16px;
-        font-weight: 600;
-      }
-
-      .login {
-        background: #222;
-        color: white;
-      }
-
-      .register {
-        border: 1px solid #222;
-        color: #222;
-        background: white;
-      }
-
-      a:hover {
-        opacity: 0.8;
-      }
-    </style>
+    <link rel="stylesheet" href="/style.css">
   </head>
 
   <body>
@@ -81,8 +17,8 @@
       </p>
 
       <div class="buttons">
-        <a href="auth/login" class="login">Login</a>
-        <a href="auth/register" class="register">Create Account</a>
+        <a href="/auth/login" class="login">Login</a>
+        <a href="/auth/register" class="register">Create Account</a>
       </div>
     </div>
   </body>
