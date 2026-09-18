@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="dashboard-container">
-      
+
       <!-- Top Header with Title & Logout -->
       <div class="dashboard-header">
         <h1>Dashboard</h1>
@@ -16,7 +16,7 @@
           <button type="submit" class="logout-btn">Logout</button>
         </form>
       </div>
-      
+
       <% if (message) { %>
           <p class="message"><%= message %></p>
       <% } %>
@@ -34,17 +34,17 @@
       <!-- URLs List -->
       <% if (urls.length === 0) { %>
         <p class="empty-state">You haven't shortened any URLs yet.</p>
-      <% } else { %> 
+      <% } else { %>
         <div class="url-list">
           <% urls.forEach(url => { %>
             <div class="url-card">
               <div class="url-info">
                 <p>
-                  <strong>Original:</strong> 
+                  <strong>Original:</strong>
                   <a href="<%= url.original_url %>" target="_blank"><%= url.original_url %></a>
                 </p>
                 <p>
-                  <strong>Short:</strong> 
+                  <strong>Short:</strong>
                   <a href="/<%= url.short_code %>" target="_blank">/<%= url.short_code %></a>
                 </p>
                 <p>
